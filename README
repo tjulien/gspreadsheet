@@ -1,0 +1,2 @@
+mvn install:install-file -DgroupId=com.google.gdata -DartifactId=gdata-spreadsheet -Dversion=3.0 -Dfile=./lib/gdata-spreadsheet-3.0.jar -Dpackaging=jar -DgeneratePom=true
+mvn install:install-file -DgroupId=com.google.gdata -DartifactId=gdata-spreadsheet-meta -Dversion=3.0 -Dfile=./lib/gdata-spreadsheet-meta-3.0.jar -Dpackaging=jar -DgeneratePom=true
