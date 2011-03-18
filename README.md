@@ -1,4 +1,13 @@
-Using the standard gdata spreadsheet api is absolutely brutal b/c somewhere along the line someone decided that the best api into a spreadsheet was an atom feed.  No, the best api into a spreadsheet is really a glorified 2-d array with some niceties for columns names.
+A simpler api into google doc spreadsheets than the standard atom-feed centric api.
+
+Example:
+    Spreadsheet s = new Spreadsheet("foo@bar.com", "aw3somepassw0rd", "Spreadsheet title", "Worksheet title");
+now you can do things like this:
+    List<Map<String, String>> rows = s.getRowView();
+which gives you a List of rows, and a Map for each of those rows that contain (column-name -> cell value) mappings.
+Or you can use a column based view:
+    Map<String, List<String>> columns = s.getColumnView()
+which gives you a Map of (column-name -> list of cell values) mappings
 
 Pre-reqs:
 	mvn install:install-file -DgroupId=com.google.gdata -DartifactId=gdata-spreadsheet -Dversion=3.0 -Dfile=./lib/gdata-spreadsheet-3.0.jar -Dpackaging=jar -DgeneratePom=true

@@ -3,16 +3,15 @@ package org.gsimple.spreadsheet;
 
 import com.google.gdata.client.spreadsheet.SpreadsheetService;
 import com.google.gdata.data.spreadsheet.*;
-import com.google.gdata.util.AuthenticationException;
 import com.google.gdata.util.ServiceException;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
 public class Spreadsheet {
-    private List<Map<String, String>> data = new ArrayList<Map<String, String>>();
+    private List<Map<String, String>> rowView = new ArrayList<Map<String, String>>();
+    private Map<String, List<String>> columnView = new HashMap<String, List<String>>();
 
     public Spreadsheet(String email, String password, String spreadsheetTitle, String worksheetTitle) throws ServiceException, IOException {
         SpreadsheetService service = new SpreadsheetService("gsimple-gspreadsheet-1");
@@ -29,21 +28,26 @@ public class Spreadsheet {
                         ListFeed listFeed = service.getFeed(listFeedUrl, ListFeed.class);
                         for (ListEntry listEntry : listFeed.getEntries()) {
                             Map<String, String> row = new TreeMap<String, String>();
-                            data.add(row);
+                            rowView.add(row);
                             for (String tag : listEntry.getCustomElements().getTags()) {
+                                if(!columnView.containsKey(tag)) {
+                                    columnView.put(tag, new ArrayList<String>());
+                                }
                                 row.put(tag, listEntry.getCustomElements().getValue(tag));
+                                columnView.get(tag).add(listEntry.getCustomElements().getValue(tag));
                             }
                         }
                     }
                 }
             }
         }
-        if(data == null) {
-            throw new ServiceException("no spreadsheet named " + spreadsheetTitle + " with worksheet named " + worksheetTitle);
-        }
     }
 
-    public List<Map<String, String>> getData() {
-        return data;
+    public List<Map<String, String>> getRowView() {
+        return rowView;
+    }
+
+    public Map<String, List<String>> getColumnView() {
+        return columnView;
     }
 }
