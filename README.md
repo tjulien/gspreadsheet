@@ -8,6 +8,10 @@ which gives you a List of rows, and a Map for each of those rows that contain (c
 Or you can use a column based view:
     Map<String, List<String>> columns = s.getColumnView()
 which gives you a Map of (column-name -> list of cell values) mappings
+You can also simply get a csv:
+    CSV csv = new CSV("foo@bar.com", "aw3somepassw0rd", "Spreadsheet title", "Worksheet title");
+    Iterable<String> = csv.getRows()
+where each entry is a comma separated row of values
 
 Pre-reqs:
 	mvn install:install-file -DgroupId=com.google.gdata -DartifactId=gdata-spreadsheet -Dversion=3.0 -Dfile=./lib/gdata-spreadsheet-3.0.jar -Dpackaging=jar -DgeneratePom=true
