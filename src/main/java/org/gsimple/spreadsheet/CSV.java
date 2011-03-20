@@ -5,11 +5,13 @@ import com.google.gdata.data.spreadsheet.*;
 import com.google.gdata.util.ServiceException;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.URL;
 import java.util.*;
 
 public class CSV {
-    private Iterable<String> csv;
+    private Iterator<ListEntry> entries;
+
     public CSV(String email, String password, String spreadsheetTitle, String worksheetTitle) throws ServiceException, IOException {
         SpreadsheetService service = new SpreadsheetService("gsimple-gspreadsheet-1");
         service.setUserCredentials(email, password);
@@ -22,7 +24,7 @@ public class CSV {
                 for (WorksheetEntry worksheet : worksheets) {
                     if(worksheet.getTitle().getPlainText().equals(worksheetTitle)){
                         URL listFeedUrl = worksheet.getListFeedUrl();
-                        csv = new CSVIterator(service.getFeed(listFeedUrl, ListFeed.class));
+                        entries = service.getFeed(listFeedUrl, ListFeed.class).getEntries().iterator();
                     }
                 }
             }
@@ -30,14 +32,22 @@ public class CSV {
     }
 
     public Iterable<String> getRows() {
-        return csv;
+        return new CSVIterator(entries);
+    }
+
+    public StringReader getReader() {
+        StringBuilder builder = new StringBuilder();
+        for(String line : getRows()) {
+            builder.append(line).append("\n");
+        }
+        return new StringReader(builder.toString());
     }
 
     private static class CSVIterator implements Iterator<String>, Iterable<String> {
         private final Iterator<ListEntry> entries;
 
-        public CSVIterator(ListFeed feed) {
-            this.entries = feed.getEntries().iterator();
+        public CSVIterator(Iterator<ListEntry> listEntries) {
+            this.entries = listEntries;
         }
 
         public Iterator<String> iterator() {
