@@ -21,6 +21,18 @@
   </repository>
  </repositories>
 
+ <scm>
+  <connection>
+     scm:git:git://github.com/tjulien/gspreadsheet.git
+  </connection>
+  <developerConnection>
+     scm:git:ssh://git@github.com/tjulien/gspreadsheet.git
+  </developerConnection>
+  <url>
+     https://github.com/tjulien/gspreadsheet
+  </url>
+</scm>
+
  <dependencies>
   <dependency>
    <groupId>com.google.collections</groupId>
